@@ -140,6 +140,9 @@ void ExtractorCallbacks::ProcessWay(ExtractionWay &parsed_way)
             parsed_way.isAccessRestricted,
             parsed_way.forward_travel_mode,
             split_edge));
+
+        if (parsed_way.keyVals.Holds("motorway"))
+          external_memory.all_edges_list.back().setRoadType(parsed_way.keyVals.Find("motorway"));
         external_memory.used_node_id_list.push_back(parsed_way.path[n]);
     }
     external_memory.used_node_id_list.push_back(parsed_way.path.back());

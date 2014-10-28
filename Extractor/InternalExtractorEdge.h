@@ -34,12 +34,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <boost/assert.hpp>
 
+typedef enum {
+  MOTORWAY = 0,
+  MOTORWAY_LINK,
+  TRUNK,
+  TRUNK_LINK,
+  PRIMARY,
+  PRIMARY_LINK,
+  SECONDARY,
+  SECONDARY_LINK,
+  TERTIARY,
+  TERTIARY_LINK,
+  UNCLASSIFIED,
+  RESIDENTIAL,
+  LIVING_STREET,
+  SERVICE,
+  DEFAULT
+} RoadType;
+
 struct InternalExtractorEdge
 {
     InternalExtractorEdge()
         : start(0), target(0), direction(0), speed(0), name_id(0), is_roundabout(false),
           is_in_tiny_cc(false), is_duration_set(false), is_access_restricted(false),
-          travel_mode(TRAVEL_MODE_INACCESSIBLE), is_split(false)
+          travel_mode(TRAVEL_MODE_INACCESSIBLE), is_split(false), roadType(DEFAULT)
     {
     }
 
@@ -57,7 +75,7 @@ struct InternalExtractorEdge
         : start(start), target(target), direction(direction), speed(speed),
           name_id(name_id), is_roundabout(is_roundabout), is_in_tiny_cc(is_in_tiny_cc),
           is_duration_set(is_duration_set), is_access_restricted(is_access_restricted),
-          travel_mode(travel_mode), is_split(is_split)
+          travel_mode(travel_mode), is_split(is_split), roadType(DEFAULT)
     {
     }
 
@@ -72,6 +90,26 @@ struct InternalExtractorEdge
             SPECIAL_NODEID, SPECIAL_NODEID, 0, 0, 0, false, false, false, false, TRAVEL_MODE_INACCESSIBLE, false);
     }
 
+    void setRoadType(std::string roadTypename) {
+
+      if ( roadTypename == "motorway" ) { roadType = MOTORWAY;  }
+else if ( roadTypename == "motorway_link" ) { roadType = MOTORWAY_LINK;  }
+else if ( roadTypename == "trunk" ) { roadType = TRUNK;  }
+else if ( roadTypename == "trunk_link" ) { roadType = TRUNK_LINK;  }
+else if ( roadTypename == "primary" ) { roadType = PRIMARY;  }
+else if ( roadTypename == "primary_link" ) { roadType = PRIMARY_LINK;  }
+else if ( roadTypename == "secondary" ) { roadType = SECONDARY;  }
+else if ( roadTypename == "secondary_link" ) { roadType = SECONDARY_LINK;  }
+else if ( roadTypename == "tertiary" ) { roadType = TERTIARY;  }
+else if ( roadTypename == "tertiary_link" ) { roadType = TERTIARY_LINK;  }
+else if ( roadTypename == "unclassified" ) { roadType = UNCLASSIFIED;  }
+else if ( roadTypename == "residential" ) { roadType = RESIDENTIAL;  }
+else if ( roadTypename == "living_street" ) { roadType = LIVING_STREET;  }
+else if ( roadTypename == "service" ) { roadType = SERVICE;  }
+else if ( roadTypename == "default" ) { roadType = DEFAULT;  }
+
+    }
+
     NodeID start;
     NodeID target;
     short direction;
@@ -83,6 +121,7 @@ struct InternalExtractorEdge
     bool is_access_restricted;
     TravelMode travel_mode : 4;
     bool is_split;
+    RoadType roadType;
 
     FixedPointCoordinate source_coordinate;
     FixedPointCoordinate target_coordinate;
